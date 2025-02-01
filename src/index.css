@@ -2,5 +2,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgb(198, 197, 197);
+  margin: 0;
+  padding: 0;
+  background-color: #1e1e1e;
 }
