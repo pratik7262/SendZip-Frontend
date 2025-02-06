@@ -120,6 +120,18 @@ export const borders = {
   900: "#0b0d10",
 };
 
+export const accentSecondary = {
+  100: "#eeddfd",
+  200: "#dcbbfc",
+  300: "#cb99fa",
+  400: "#b977f9",
+  500: "#a855f7",
+  600: "#8644c6",
+  700: "#653394",
+  800: "#432263",
+  900: "#221131",
+};
+
 const theme = createTheme({
   palette: {
     primary: {

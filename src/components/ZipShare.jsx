@@ -3,15 +3,25 @@ import {
   CircularProgress,
   Grid,
   IconButton,
-  Paper,
-  Stack,
+  Box,
+  Typography,
 } from "@mui/material";
+import { CloudUpload, CloudDownload } from "@mui/icons-material"; // New Icons
 import axios from "axios";
 import { useRef, useState } from "react";
 import { BASE_URL } from "../urls";
-import { MdCloudUpload } from "react-icons/md";
 import { toast } from "react-toastify";
 import Toast from "./Toast";
+import {
+  accent,
+  primary,
+  secondary,
+  textPrimary,
+  background,
+  borders,
+  accentSecondary,
+} from "../theme";
+import { Link } from "react-router-dom";
 
 const ZipShare = () => {
   const uploadRef = useRef();
@@ -20,25 +30,21 @@ const ZipShare = () => {
   const [selectedFile, setSelectedFile] = useState(null);
 
   const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]); // Get the selected file
+    setSelectedFile(event.target.files[0]);
   };
 
-  const handleClcik = () => {
+  const handleClick = () => {
     uploadRef.current.click();
   };
 
   const handleUpload = async () => {
-    // Check if the file is a ZIP file
-    // if (selectedFile.type !== "application/zip") {
-    //   alert("Only Zip is allowed");
-    //   console.log(selectedFile.type);
-    //   return;
-    // }
-
+    if (!selectedFile) {
+      toast.error("Please select a file first.");
+      return;
+    }
     setLoading(true);
     const formData = new FormData();
-    formData.append("file", selectedFile); // Append the file to FormData
-
+    formData.append("file", selectedFile);
     try {
       await axios.post(`${BASE_URL}/api/zip/uploadZip`, formData, {
         headers: {
@@ -47,11 +53,10 @@ const ZipShare = () => {
       });
       toast.success("File uploaded successfully!");
       setSelectedFile(null);
-      setLoading(false);
     } catch (error) {
       toast.error("Error uploading file: " + error.message);
-      setLoading(false);
     }
+    setLoading(false);
   };
 
   const handleDownload = async () => {
@@ -63,94 +68,142 @@ const ZipShare = () => {
 
       // Extract filename from Content-Disposition header
       const contentDisposition = response.headers["content-disposition"];
-
       const filename = contentDisposition
-        ? contentDisposition.split("filename=")[1].replace(/"/g, "") // Parse the filename
-        : "downloaded-file.zip"; // Fallback filename
+        ? contentDisposition.split("filename=")[1].replace(/"/g, "")
+        : "downloaded-file.zip";
 
       const blob = new Blob([response.data], { type: "application/zip" });
-
       const link = document.createElement("a");
       link.href = window.URL.createObjectURL(blob);
       link.download = filename;
       link.click();
-
       window.URL.revokeObjectURL(link.href);
 
       toast.success("File downloaded successfully!");
-      setIsLoading(false);
     } catch (error) {
-      setIsLoading(false);
       toast.error("Error downloading file: " + error.message);
     }
-  };
-
-  const paperStyle = {
-    padding: 20,
-    // height: "50vh",
-    width: 280,
-    margin: "20px auto",
-  };
-  const btnstyle = {
-    margin: "8px 0",
-    // backgroundColor: "#607d8b",
-    width: "40%",
+    setIsLoading(false);
   };
 
   return (
-    <Grid justifyContent="center" alignItems="center">
-      <Paper elevation={10} style={paperStyle}>
-        <Grid align="center">
-          <h2>SendZip</h2>
-        </Grid>
-        <input
-          type="file"
-          // fullWidth
-          ref={uploadRef}
-          // value={selectedFile}
-          required
-          style={{ my: 1, display: "none" }}
-          name="zip"
-          onChange={handleFileChange}
-        />
-        <Stack width="100%" justifyContent="center" alignItems="center">
-          <IconButton onClick={handleClcik}>
-            {selectedFile ? (
-              <MdCloudUpload style={{ fontSize: 100, color: "#4caf50" }} />
-            ) : (
-              <MdCloudUpload style={{ fontSize: 100 }} />
-            )}
-          </IconButton>
-        </Stack>
-        <Stack direction="row" spacing={2} justifyContent="space-between">
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 3,
+        width: "100%",
+        maxWidth: "500px",
+        margin: "auto",
+        padding: 4,
+        backgroundColor: background[500],
+        borderRadius: 3,
+        boxShadow: `0px 0px 15px ${borders[500]}`,
+      }}
+    >
+      {/* Header */}
+      <Typography variant="h5" color={textPrimary[500]} fontWeight="bold">
+        SendZip
+      </Typography>
+
+      {/* Hidden File Input */}
+      <input
+        type="file"
+        ref={uploadRef}
+        style={{ display: "none" }}
+        name="zip"
+        onChange={handleFileChange}
+      />
+
+      {/* Upload Icon with File Name */}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 1,
+        }}
+      >
+        <IconButton
+          onClick={handleClick}
+          sx={{
+            color: selectedFile ? accent[500] : accentSecondary[500],
+          }}
+        >
+          <CloudUpload sx={{ fontSize: 80 }} />
+        </IconButton>
+        <Typography
+          variant="body2"
+          color={textPrimary[500]}
+          sx={{ opacity: selectedFile ? 1 : 0.5 }}
+        >
+          {selectedFile ? selectedFile.name : "No file selected"}
+        </Typography>
+      </Box>
+
+      {/* Upload & Download Buttons */}
+      <Grid container spacing={2}>
+        <Grid item xs={6}>
           <Button
             onClick={handleUpload}
-            color="warning"
+            fullWidth
             variant="contained"
-            style={btnstyle}
+            sx={{
+              backgroundColor: secondary[500],
+              "&:hover": { backgroundColor: secondary[600] },
+              height: "45px",
+            }}
           >
             {loading ? (
               <CircularProgress sx={{ color: "white" }} size={24} />
             ) : (
-              "Upload"
+              <>
+                <CloudUpload sx={{ marginRight: 1, fontSize: 20 }} />
+                Upload
+              </>
             )}
           </Button>
+        </Grid>
+        <Grid item xs={6}>
           <Button
-            type="submit"
-            variant="contained"
-            style={btnstyle}
             onClick={handleDownload}
+            fullWidth
+            variant="contained"
+            sx={{
+              backgroundColor: primary[500],
+              "&:hover": { backgroundColor: primary[700] },
+              height: "45px",
+            }}
           >
             {isLoading ? (
               <CircularProgress sx={{ color: "white" }} size={24} />
             ) : (
-              "Download"
+              <>
+                <CloudDownload sx={{ marginRight: 1, fontSize: 20 }} />
+                Download
+              </>
             )}
           </Button>
-        </Stack>
-      </Paper>
+        </Grid>
+      </Grid>
+
+      {/* SendText Link */}
+      <Link
+        to="/sendText"
+        style={{
+          color: textPrimary[500],
+          fontSize: "1.1rem",
+          textAlign: "center",
+          marginTop: "10px",
+          textDecoration: "none",
+        }}
+      >
+        ➝ SendText
+      </Link>
+
       <Toast />
-    </Grid>
+    </Box>
   );
 };
 
