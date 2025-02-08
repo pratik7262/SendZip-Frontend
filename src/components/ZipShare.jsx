@@ -5,8 +5,9 @@ import {
   IconButton,
   Box,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
-import { CloudUpload, CloudDownload } from "@mui/icons-material"; // New Icons
+import { CloudUpload, CloudDownload } from "@mui/icons-material";
 import axios from "axios";
 import { useRef, useState } from "react";
 import { BASE_URL } from "../urls";
@@ -28,6 +29,9 @@ const ZipShare = () => {
   const [loading, setLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+
+  // Responsive behavior
+  const isSmallScreen = useMediaQuery("(max-width:600px)");
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -66,7 +70,6 @@ const ZipShare = () => {
         responseType: "blob",
       });
 
-      // Extract filename from Content-Disposition header
       const contentDisposition = response.headers["content-disposition"];
       const filename = contentDisposition
         ? contentDisposition.split("filename=")[1].replace(/"/g, "")
@@ -92,11 +95,10 @@ const ZipShare = () => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        gap: 3,
         width: "100%",
-        maxWidth: "500px",
+        maxWidth: isSmallScreen ? "90%" : "500px",
         margin: "auto",
-        padding: 4,
+        padding: isSmallScreen ? 2 : 4,
         backgroundColor: background[500],
         borderRadius: 3,
         boxShadow: `0px 0px 15px ${borders[500]}`,
@@ -131,20 +133,20 @@ const ZipShare = () => {
             color: selectedFile ? accent[500] : accentSecondary[500],
           }}
         >
-          <CloudUpload sx={{ fontSize: 80 }} />
+          <CloudUpload sx={{ fontSize: isSmallScreen ? 60 : 80 }} />
         </IconButton>
         <Typography
           variant="body2"
           color={textPrimary[500]}
-          sx={{ opacity: selectedFile ? 1 : 0.5 }}
+          sx={{ opacity: selectedFile ? 1 : 0.5, textAlign: "center" }}
         >
           {selectedFile ? selectedFile.name : "No file selected"}
         </Typography>
       </Box>
 
       {/* Upload & Download Buttons */}
-      <Grid container spacing={2}>
-        <Grid item xs={6}>
+      <Grid container spacing={2} sx={{ width: "100%", marginTop: 2 }}>
+        <Grid item xs={12} sm={6}>
           <Button
             onClick={handleUpload}
             fullWidth
@@ -165,7 +167,7 @@ const ZipShare = () => {
             )}
           </Button>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} sm={6}>
           <Button
             onClick={handleDownload}
             fullWidth
@@ -193,9 +195,9 @@ const ZipShare = () => {
         to="/sendText"
         style={{
           color: textPrimary[500],
-          fontSize: "1.1rem",
+          fontSize: isSmallScreen ? "1rem" : "1.1rem",
           textAlign: "center",
-          marginTop: "10px",
+          marginTop: "15px",
           textDecoration: "none",
         }}
       >

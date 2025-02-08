@@ -1,5 +1,20 @@
 import React, { useState } from "react";
-import { Button, TextField, Box, Grid, Typography } from "@mui/material";
+import {
+  Button,
+  TextField,
+  Box,
+  Grid,
+  Typography,
+  Card,
+  InputAdornment,
+  IconButton,
+  useMediaQuery,
+} from "@mui/material";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import axios from "axios";
+import Toast from "./Toast";
+import { BASE_URL } from "../urls";
 import {
   background,
   borders,
@@ -8,159 +23,239 @@ import {
   secondary,
   textPrimary,
 } from "../theme";
-import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
-import { BASE_URL } from "../urls";
-import axios from "axios";
-import Toast from "./Toast";
+import { CheckCircle, ContentCopy } from "@mui/icons-material";
 
 const INITIAL_DATA = { text: "", code: "" };
+
 const TextShare = () => {
   const [data, setData] = useState(INITIAL_DATA);
+  const [code, setCode] = useState("");
+  const [copied, setCopied] = useState("");
+
+  // Responsive behavior
+  const isSmallScreen = useMediaQuery("(max-width:600px)");
+
+  const handleCopy = (text, btn) => {
+    if (!text) return;
+    navigator.clipboard.writeText(text);
+    setCopied(btn);
+    toast.success("Copied to clipboard!");
+    setTimeout(() => setCopied(""), 2000);
+  };
+
+  function isSixDigitNumber(str) {
+    return /^\d{6}$/.test(str);
+  }
 
   const getText = async () => {
     try {
-      if (Number(data.code) === 0 || Number(data.code) < 100000) {
-        toast.warning("Please enter code correctly...");
+      if (!isSixDigitNumber(code)) {
+        toast.warning("Please enter a valid 6-digit code.");
+        return;
       }
-      const response = await axios.get(
-        `${BASE_URL}/api/text/getText/${data.code}`
-      );
-
-      setData({ text: response.data.text, code: response.data.text });
-      toast.success("Text fetched successfully!");
+      const response = await axios.get(`${BASE_URL}/api/text/getText/${code}`);
+      if (response.data.success) {
+        setCode(response.data.text);
+        toast.success("Text fetched successfully!");
+      } else {
+        toast.warning(response.data.message);
+      }
     } catch (error) {
-      toast.error("Error: Failed to fetch text!");
+      toast.error(error.message);
     }
   };
 
   const sendText = async () => {
     try {
       if (!data.text.trim()) {
-        toast.error("Error: Text cannot be empty!");
+        toast.warn("Error: Text cannot be empty!");
         return;
       }
-
-      const responce = await axios.post(`${BASE_URL}/api/text/sendText`, {
+      const response = await axios.post(`${BASE_URL}/api/text/sendText`, {
         text: data.text,
       });
-      setData({ text: "", code: responce.data.code });
-      toast.success(responce.data.message);
+      setData({ text: "", code: response.data.code });
+      toast.success(response.data.message);
     } catch (error) {
       toast.error(error.message);
     }
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: 3,
-        width: "100%",
-        maxWidth: "500px",
-        margin: "auto",
-        padding: 4,
-        backgroundColor: background[500],
-        borderRadius: 3,
-        boxShadow: `0px 0px 15px ${borders[500]}`,
-      }}
-    >
-      <Typography variant="h5" color={textPrimary[500]} fontWeight="bold">
-        SendText
-      </Typography>
+    <>
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 4, px: 2 }}>
+        <Grid container spacing={3} sx={{ maxWidth: "900px", width: "100%" }}>
+          {/* Send Text Card */}
+          <Grid item xs={12} md={6}>
+            <Card
+              sx={{
+                padding: 3,
+                backgroundColor: background[500],
+                borderRadius: 3,
+                boxShadow: `0px 0px 10px ${borders[500]}`,
+              }}
+            >
+              <Typography
+                variant="h6"
+                color={textPrimary[500]}
+                fontWeight="bold"
+              >
+                Send Text
+              </Typography>
 
-      {/* Large Text Area */}
-      <TextField
-        multiline
-        rows={6}
-        variant="outlined"
-        fullWidth
-        value={data.text}
-        onChange={(e) =>
-          setData((prevData) => {
-            return { ...prevData, text: e.target.value };
-          })
-        }
-        placeholder="Enter your text here..."
-        sx={{
-          backgroundColor: cardBackground[500],
-          borderRadius: 1,
-          input: { color: textPrimary[500] }, // Light text
-          "& .MuiOutlinedInput-root": {
-            "& fieldset": { borderColor: borders[500] },
-            "&:hover fieldset": { borderColor: primary[500] },
-            "&.Mui-focused fieldset": { borderColor: primary[500] },
-          },
-        }}
-      />
+              <TextField
+                variant="outlined"
+                fullWidth
+                value={data.text}
+                onChange={(e) => setData({ ...data, text: e.target.value })}
+                placeholder="Enter your text here..."
+                sx={{
+                  backgroundColor: cardBackground[500],
+                  borderRadius: 1,
+                  mt: 2,
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": { borderColor: borders[500] },
+                    "&:hover fieldset": { borderColor: primary[500] },
+                    "&.Mui-focused fieldset": { borderColor: primary[500] },
+                  },
+                }}
+              />
 
-      <TextField
-        variant="outlined"
-        fullWidth
-        value={data.code}
-        onChange={(e) =>
-          setData((prevData) => {
-            return { ...prevData, code: e.target.value };
-          })
-        }
-        placeholder="Enter your code here..."
-        sx={{
-          backgroundColor: cardBackground[500],
-          borderRadius: 1,
-          input: { color: textPrimary[500] }, // Light text
-          "& .MuiOutlinedInput-root": {
-            "& fieldset": { borderColor: borders[500] },
-            "&:hover fieldset": { borderColor: primary[500] },
-            "&.Mui-focused fieldset": { borderColor: primary[500] },
-          },
-        }}
-      />
+              <Button
+                variant="contained"
+                fullWidth
+                sx={{
+                  backgroundColor: secondary[500],
+                  mt: 2,
+                  "&:hover": { backgroundColor: secondary[600] },
+                }}
+                onClick={sendText}
+              >
+                Send
+              </Button>
 
-      {/* Buttons at the bottom */}
-      <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <Button
-            variant="contained"
-            fullWidth
-            sx={{
-              backgroundColor: secondary[500],
-              "&:hover": { backgroundColor: secondary[600] },
-            }}
-            onClick={sendText}
-          >
-            Send
-          </Button>
+              <Box
+                sx={{
+                  mt: 2,
+                  p: 1,
+                  textAlign: "center",
+                  backgroundColor: cardBackground[500],
+                  borderRadius: 1,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Typography variant="body1">
+                  {data.code ? data.code : "Code"}
+                </Typography>
+                {data.code && (
+                  <IconButton onClick={() => handleCopy(data.code, "code")}>
+                    {copied === "code" ? (
+                      <CheckCircle sx={{ fontSize: "20px" }} color="success" />
+                    ) : (
+                      <ContentCopy sx={{ fontSize: "20px" }} />
+                    )}
+                  </IconButton>
+                )}
+              </Box>
+            </Card>
+          </Grid>
+
+          {/* Get Text Card */}
+          <Grid item xs={12} md={6}>
+            <Card
+              sx={{
+                padding: 3,
+                backgroundColor: background[500],
+                borderRadius: 3,
+                boxShadow: `0px 0px 10px ${borders[500]}`,
+              }}
+            >
+              <Typography
+                variant="h6"
+                color={textPrimary[500]}
+                fontWeight="bold"
+              >
+                Get Text
+              </Typography>
+
+              <TextField
+                variant="outlined"
+                fullWidth
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                placeholder="Enter 6-digit code here..."
+                sx={{
+                  backgroundColor: cardBackground[500],
+                  borderRadius: 1,
+                  mt: 2,
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": { borderColor: borders[500] },
+                    "&:hover fieldset": { borderColor: primary[500] },
+                    "&.Mui-focused fieldset": { borderColor: primary[500] },
+                  },
+                }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={() => handleCopy(code, "text")}>
+                        {copied === "text" ? (
+                          <CheckCircle color="success" />
+                        ) : (
+                          <ContentCopy />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+
+              <Button
+                onClick={getText}
+                variant="contained"
+                fullWidth
+                sx={{
+                  backgroundColor: primary[500],
+                  mt: 2,
+                  "&:hover": { backgroundColor: primary[700] },
+                }}
+              >
+                Get
+              </Button>
+
+              <Typography
+                variant="body1"
+                sx={{
+                  mt: 2,
+                  p: 1,
+                  textAlign: "center",
+                  backgroundColor: cardBackground[500],
+                  borderRadius: 1,
+                }}
+              >
+                Enter a code to retrieve text.
+              </Typography>
+            </Card>
+          </Grid>
         </Grid>
-        <Grid item xs={6}>
-          <Button
-            onClick={getText}
-            variant="contained"
-            fullWidth
-            sx={{
-              backgroundColor: primary[500],
-              "&:hover": { backgroundColor: primary[700] },
-            }}
-          >
-            Get
-          </Button>
-        </Grid>
-      </Grid>
+
+        <Toast />
+      </Box>
       <Link
         to="/"
         style={{
           color: textPrimary[500],
-          fontSize: "1.1rem",
+          fontSize: isSmallScreen ? "1rem" : "1.1rem",
           textAlign: "center",
-          marginTop: "10px",
           textDecoration: "none",
+          display: "block",
+          marginTop: 50,
         }}
       >
         ➝ SendZip
       </Link>
-      <Toast />
-    </Box>
+    </>
   );
 };
 
