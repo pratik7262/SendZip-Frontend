@@ -10,7 +10,7 @@ import {
 import { CloudUpload, CloudDownload } from "@mui/icons-material";
 import axios from "axios";
 import { useRef, useState } from "react";
-import { BASE_URL } from "../urls";
+import { BASE_URL, DOWNLOAD_ZIP, UPLOAD_ZIP } from "../urls";
 import { toast } from "react-toastify";
 import Toast from "./Toast";
 import {
@@ -50,7 +50,7 @@ const ZipShare = () => {
     const formData = new FormData();
     formData.append("file", selectedFile);
     try {
-      await axios.post(`${BASE_URL}/api/zip/uploadZip`, formData, {
+      await axios.post(`${BASE_URL}${UPLOAD_ZIP}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -66,7 +66,7 @@ const ZipShare = () => {
   const handleDownload = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`${BASE_URL}/api/zip/downloadZip`, {
+      const response = await axios.get(`${BASE_URL}${DOWNLOAD_ZIP}`, {
         responseType: "blob",
       });
 

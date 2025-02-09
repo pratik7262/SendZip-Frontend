@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 import Toast from "./Toast";
-import { BASE_URL } from "../urls";
+import { BASE_URL, GET_TEXT, SEND_TEXT } from "../urls";
 import {
   background,
   borders,
@@ -53,7 +53,7 @@ const TextShare = () => {
         toast.warning("Please enter a valid 6-digit code.");
         return;
       }
-      const response = await axios.get(`${BASE_URL}/api/text/getText/${code}`);
+      const response = await axios.get(`${BASE_URL}${GET_TEXT}${code}`);
       if (response.data.success) {
         setCode(response.data.text);
         toast.success("Text fetched successfully!");
@@ -71,7 +71,9 @@ const TextShare = () => {
         toast.warn("Error: Text cannot be empty!");
         return;
       }
-      const response = await axios.post(`${BASE_URL}/api/text/sendText`, {
+
+      console.log(`${BASE_URL}${SEND_TEXT}`);
+      const response = await axios.post(`${BASE_URL}${SEND_TEXT}`, {
         text: data.text,
       });
       setData({ text: "", code: response.data.code });
