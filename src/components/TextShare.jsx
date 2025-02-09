@@ -39,7 +39,7 @@ const TextShare = () => {
     if (!text) return;
     navigator.clipboard.writeText(text);
     setCopied(btn);
-    toast.success("Copied to clipboard!");
+    // toast.success("Copied to clipboard!");
     setTimeout(() => setCopied(""), 2000);
   };
 
