@@ -8,13 +8,17 @@ import {
   Card,
   InputAdornment,
   IconButton,
-  useMediaQuery,
 } from "@mui/material";
-import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 import Toast from "./Toast";
-import { BASE_URL, GET_TEXT, SEND_TEXT } from "../urls";
+import {
+  BASE_URL,
+  GET_TEXT,
+  SEND_TEXT,
+  sendTextWithoutCode,
+  sendZip,
+} from "../urls";
 import {
   background,
   borders,
@@ -24,6 +28,7 @@ import {
   textPrimary,
 } from "../theme";
 import { CheckCircle, ContentCopy } from "@mui/icons-material";
+import Navigation from "./Navigation";
 
 const INITIAL_DATA = { text: "", code: "" };
 
@@ -31,9 +36,6 @@ const TextShare = () => {
   const [data, setData] = useState(INITIAL_DATA);
   const [code, setCode] = useState("");
   const [copied, setCopied] = useState("");
-
-  // Responsive behavior
-  const isSmallScreen = useMediaQuery("(max-width:600px)");
 
   const handleCopy = (text, btn) => {
     if (!text) return;
@@ -107,6 +109,8 @@ const TextShare = () => {
 
               <TextField
                 variant="outlined"
+                multiline
+                rows={4}
                 fullWidth
                 value={data.text}
                 onChange={(e) => setData({ ...data, text: e.target.value })}
@@ -185,6 +189,8 @@ const TextShare = () => {
               <TextField
                 variant="outlined"
                 fullWidth
+                multiline
+                rows={4}
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
                 placeholder="Enter 6-digit code here..."
@@ -244,19 +250,14 @@ const TextShare = () => {
 
         <Toast />
       </Box>
-      <Link
-        to="/"
-        style={{
-          color: textPrimary[500],
-          fontSize: isSmallScreen ? "1rem" : "1.1rem",
-          textAlign: "center",
-          textDecoration: "none",
-          display: "block",
-          marginTop: 50,
-        }}
-      >
-        ➝ SendZip
-      </Link>
+      <Navigation
+        maxWidth="690px"
+        mt={2}
+        prev="sendZip"
+        prevPath={sendZip}
+        next="SendText Without Code"
+        nextPath={sendTextWithoutCode}
+      />
     </>
   );
 };

@@ -10,7 +10,13 @@ import {
 import { CloudUpload, CloudDownload } from "@mui/icons-material";
 import axios from "axios";
 import { useRef, useState } from "react";
-import { BASE_URL, DOWNLOAD_ZIP, UPLOAD_ZIP } from "../urls";
+import {
+  BASE_URL,
+  DOWNLOAD_ZIP,
+  sendText,
+  sendTextWithoutCode,
+  UPLOAD_ZIP,
+} from "../urls";
 import { toast } from "react-toastify";
 import Toast from "./Toast";
 import {
@@ -22,7 +28,7 @@ import {
   borders,
   accentSecondary,
 } from "../theme";
-import { Link } from "react-router-dom";
+import Navigation from "./Navigation";
 
 const ZipShare = () => {
   const uploadRef = useRef();
@@ -145,7 +151,7 @@ const ZipShare = () => {
       </Box>
 
       {/* Upload & Download Buttons */}
-      <Grid container spacing={2} sx={{ width: "100%", marginTop: 2 }}>
+      <Grid container spacing={2} sx={{ width: "100%", my: 2 }}>
         <Grid item xs={12} sm={6}>
           <Button
             onClick={handleUpload}
@@ -190,19 +196,12 @@ const ZipShare = () => {
         </Grid>
       </Grid>
 
-      {/* SendText Link */}
-      <Link
-        to="/sendText"
-        style={{
-          color: textPrimary[500],
-          fontSize: isSmallScreen ? "1rem" : "1.1rem",
-          textAlign: "center",
-          marginTop: "15px",
-          textDecoration: "none",
-        }}
-      >
-        ➝ SendText
-      </Link>
+      <Navigation
+        prev="SendText Without Code"
+        prevPath={sendTextWithoutCode}
+        next="sendText"
+        nextPath={sendText}
+      />
 
       <Toast />
     </Box>
