@@ -1,70 +1,113 @@
-# Getting Started with Create React App
+# 📦 SendZip - Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+React-based frontend for **SendZip**, a web app to transfer ZIP files between devices with secure and temporary storage.
 
-## Available Scripts
+🔗 **Related Repository:** [SendZip Backend](https://github.com/pratik7262/SendZip-Backend)
 
-In the project directory, you can run:
+---
 
-### `yarn start`
+## 🚀 Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- 📂 Upload and send ZIP files instantly
+- 🔄 Real-time status updates for file transfers
+- ⏳ Automatic file deletion after a set time
+- 📱 Fully responsive design for mobile & desktop
+- 🔐 Secure communication with backend API
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `yarn test`
+## 🛠 Tech Stack
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **React.js**
+- **Material UI**
+- **Axios**
+- **JavaScript (ES6+)**
 
-### `yarn build`
+<!-- ---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🌐 Live Demo
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+_(Add link after deployment)_
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+--- -->
 
-### `yarn eject`
+## 📂 Folder Structure
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```
+SendZip-Frontend/
+│── public/              # Static assets
+│── src/
+│   ├── components/       # Reusable UI components
+│   ├── pages/            # Main page views
+│   ├── services/         # API calls & helpers
+│   ├── App.js            # Main app component
+│   └── index.js          # Entry point
+│── package.json
+└── README.md
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 📦 Installation & Setup
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### 1️⃣ Clone the repository
 
-## Learn More
+```bash
+git clone https://github.com/pratik7262/SendZip-Frontend.git
+cd SendZip-Frontend
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### 2️⃣ Install dependencies
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+npm install
+```
 
-### Code Splitting
+### 3️⃣ Configure environment variables
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Create a `.env` file in the root directory and add:
 
-### Analyzing the Bundle Size
+```
+REACT_APP_API_BASE_URL=http://localhost:5000
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+_(Change to your deployed backend URL after hosting)_
 
-### Making a Progressive Web App
+### 4️⃣ Run the development server
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```bash
+npm start
+```
 
-### Advanced Configuration
+### 5️⃣ Build for production
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```bash
+npm run build
+```
 
-### Deployment
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## 🔗 API Integration
 
-### `yarn build` fails to minify
+The frontend communicates with the backend API for:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Uploading ZIP files
+- Fetching download links
+- Managing expiration times
+
+📌 Backend Repo → [SendZip Backend](https://github.com/pratik7262/SendZip-Backend)
+
+---
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License** — feel free to use and modify.
+
+---
+
+## ✨ Author
+
+**Pratik**  
+💼 [Portfolio](https://pratikshinde.in) || 🐙 [GitHub](https://github.com/pratik7262)
