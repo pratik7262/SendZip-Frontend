@@ -10,13 +10,7 @@ import {
 import { CloudUpload, CloudDownload } from "@mui/icons-material";
 import axios from "axios";
 import { useRef, useState } from "react";
-import {
-  BASE_URL,
-  DOWNLOAD_ZIP,
-  sendText,
-  sendTextWithoutCode,
-  UPLOAD_ZIP,
-} from "../urls";
+import { BASE_URL, DOWNLOAD_ZIP, sendText, UPLOAD_ZIP } from "../urls";
 import { toast } from "react-toastify";
 import Toast from "./Toast";
 import {
@@ -196,12 +190,7 @@ const ZipShare = () => {
         </Grid>
       </Grid>
 
-      <Navigation
-        prev="SendText Without Code"
-        prevPath={sendTextWithoutCode}
-        next="sendText"
-        nextPath={sendText}
-      />
+      <Navigation next="sendText" nextPath={sendText} />
 
       <Toast />
     </Box>

@@ -12,13 +12,7 @@ import {
 import { toast } from "react-toastify";
 import axios from "axios";
 import Toast from "./Toast";
-import {
-  BASE_URL,
-  GET_TEXT,
-  SEND_TEXT,
-  sendTextWithoutCode,
-  sendZip,
-} from "../urls";
+import { BASE_URL, GET_TEXT, SEND_TEXT, sendZip } from "../urls";
 import {
   background,
   borders,
@@ -250,14 +244,7 @@ const TextShare = () => {
 
         <Toast />
       </Box>
-      <Navigation
-        maxWidth="690px"
-        mt={2}
-        prev="sendZip"
-        prevPath={sendZip}
-        next="SendText Without Code"
-        nextPath={sendTextWithoutCode}
-      />
+      <Navigation maxWidth="690px" mt={2} prev="sendZip" prevPath={sendZip} />
     </>
   );
 };

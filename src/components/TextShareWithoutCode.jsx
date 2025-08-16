@@ -13,7 +13,6 @@ import {
   BASE_URL,
   GET_TEXT_WITHOUT_CODE,
   SEND_TEXT_WITHOUT_CODE,
-  sendText as sendTextPath,
   sendZip,
 } from "../urls";
 import axios from "axios";
@@ -126,12 +125,7 @@ const TextShareWithoutCode = () => {
         </Grid>
       </Grid>
 
-      <Navigation
-        prev="sendText"
-        prevPath={sendTextPath}
-        next="sendZip"
-        nextPath={sendZip}
-      />
+      <Navigation next="sendZip" nextPath={sendZip} />
       <Toast />
     </Box>
   );

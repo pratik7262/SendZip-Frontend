@@ -1,7 +1,6 @@
 import { Stack } from "@mui/material";
 import ZipShare from "./components/ZipShare";
 import { Route, Routes } from "react-router-dom";
-import TextShare from "./components/TextShare";
 import TextShareWithoutCode from "./components/TextShareWithoutCode";
 
 function App() {
@@ -17,8 +16,8 @@ function App() {
     >
       <Routes>
         <Route path="/" element={<ZipShare />} />
-        <Route path="/sendText" element={<TextShare />} />
-        <Route path="/sidBhosdika" element={<TextShareWithoutCode />} />
+        {/* <Route path="/sendText" element={<TextShare />} /> Removed feature  */}
+        <Route path="/sendText" element={<TextShareWithoutCode />} />
       </Routes>
     </Stack>
   );

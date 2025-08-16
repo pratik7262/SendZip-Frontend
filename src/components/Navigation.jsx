@@ -8,23 +8,11 @@ const Navigation = ({ prev, prevPath, next, nextPath, ...props }) => {
 
   return (
     <Stack
-      direction="row"
+      direction="row-reverse"
       justifyContent="space-between"
       sx={{ width: "100%" }}
       {...props}
     >
-      <Link
-        to={prevPath}
-        style={{
-          color: textPrimary[500],
-          fontSize: isSmallScreen ? "0.9rem" : "1.1rem",
-          textAlign: "center",
-          marginTop: isSmallScreen ? "10px" : "15px",
-          textDecoration: "none",
-        }}
-      >
-        ⟵ {prev}
-      </Link>
       <Link
         to={nextPath}
         style={{
